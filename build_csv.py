@@ -86,10 +86,10 @@ def main():
             for n in range(1, 6):
                 url = f"{BASE_URL}/carousels/{fid}/slide_{n:02d}.png"
                 rows.append({
-                    "Message": caption,
-                    "Media Type": "image",
-                    "Media URL": url,
-                    "Date/Time": datetime_str,
+                    "message": caption,
+                    "type": "image",
+                    "link": url,
+                    " time": datetime_str,
                 })
         else:
             caption = static_caps.get(cap_key, "")
@@ -97,21 +97,21 @@ def main():
                 raise SystemExit(f"Missing static caption for {cap_key}")
             url = f"{BASE_URL}/statics/{fid}"
             rows.append({
-                "Message": caption,
-                "Media Type": "image",
-                "Media URL": url,
-                "Date/Time": datetime_str,
+                "message": caption,
+                "type": "image",
+                "link": url,
+                " time": datetime_str,
             })
 
     out = Path(__file__).parent / "schedule.csv"
     with out.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["Message", "Media Type", "Media URL", "Date/Time"])
+        writer = csv.DictWriter(f, fieldnames=["message", "type", "link", " time"])
         writer.writeheader()
         writer.writerows(rows)
     print(f"Wrote {len(rows)} rows to {out}")
     # Summary
-    carousel_rows = sum(1 for r in rows if "/carousels/" in r["Media URL"])
-    static_rows = sum(1 for r in rows if "/statics/" in r["Media URL"])
+    carousel_rows = sum(1 for r in rows if "/carousels/" in r["link"])
+    static_rows = sum(1 for r in rows if "/statics/" in r["link"])
     print(f"  carousel rows: {carousel_rows} (expect 50)")
     print(f"  static rows:   {static_rows} (expect 10)")
 
